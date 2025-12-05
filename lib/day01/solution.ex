@@ -104,7 +104,7 @@ defmodule AOC.Day01 do
           end
 
         extra_rotations =
-          if new_dial_position > max_dial || new_dial_position < min_dial ||
+          if new_dial_position > max_dial || (new_dial_position < min_dial && dial_position != 0) ||
                new_dial_position == 0 do
             1
           else
@@ -129,8 +129,7 @@ defmodule AOC.Day01 do
           Directions #{list_item} current rotation #{dial_position}
           New dial pos #{new_dial_position}
           Full rotations #{extra_full_rotations}, extra rotations #{extra_rotations}
-          Rotation total before #{passed_zero}
-          Rotation total after #{passed_zero + extra_full_rotations + extra_rotations}
+          Rotation total before #{passed_zero}, after #{passed_zero + extra_full_rotations + extra_rotations}
           """,
           [:append]
         )
