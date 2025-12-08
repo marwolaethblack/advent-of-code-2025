@@ -48,5 +48,48 @@ defmodule AOC.Day07 do
   end
 
   def part2() do
+    parsed_input = parse_input("lib/day07/input.txt")
+
+    matrix =
+      parsed_input |> Enum.map(fn x -> String.graphemes(x) |> Vector.new() end)
+
+    [first | rest] = matrix
+
+    start_index = first |> Enum.find_index(fn x -> x == "S" end)
+
+    indexes =
+      Vector.new(rest)
+      |> Enum.reduce(%{start_index => 1}, fn row, beam_indexes ->
+        laser_path =
+          beam_indexes
+          |> Enum.reduce(%{}, fn {k, _}, acc -> Map.put(acc, k, row[k]) end)
+
+        new_beam_indexes =
+          beam_indexes
+          |> Enum.reduce(beam_indexes, fn {k, v}, nbi ->
+            if laser_path |> Map.get(k) == "^" and v > 0 do
+              nbi
+              |> Map.put(k - 1, Map.get(nbi, k - 1, 0) + v)
+              |> Map.put(k + 1, Map.get(nbi, k + 1, 0) + v)
+              |> Map.put(k, 0)
+            else
+              nbi
+            end
+          end)
+
+        new_beam_indexes
+      end)
+
+    result =
+      indexes
+      |> Enum.reduce(0, fn {k, v}, acc ->
+        if k < Vector.length(first) do
+          acc + v
+        else
+          acc
+        end
+      end)
+
+    IO.puts("Result: #{result}")
   end
 end
