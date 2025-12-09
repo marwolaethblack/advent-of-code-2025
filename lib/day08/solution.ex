@@ -12,19 +12,6 @@ defmodule AOC.Day08 do
     end
   end
 
-  def coordinate_distance({x1, y1, z1}, {x2, y2, z2}) do
-    (:math.pow(x2 - x1, 2) + :math.pow(y2 - y1, 2) + :math.pow(z2 - z1, 2)) |> :math.sqrt()
-  end
-
-  def coordinate_pairs(coordinates_list) do
-    if length(coordinates_list) == 1 do
-      []
-    else
-      [first | rest] = coordinates_list
-      Enum.map(rest, fn r -> {first, r} end) ++ coordinate_pairs(rest)
-    end
-  end
-
   def part1(text \\ parse_input("lib/day08/input.txt"), result_num \\ 1000) do
     coordinates_list =
       text
@@ -39,9 +26,9 @@ defmodule AOC.Day08 do
       end)
 
     pairs =
-      coordinate_pairs(coordinates_list)
+      Utils.Coordinates.coordinate_pairs(coordinates_list)
       |> Enum.map(fn {coord1, coord2} ->
-        distance = coordinate_distance(coord1, coord2)
+        distance = Utils.Coordinates.coordinate_distance(coord1, coord2)
 
         {coord1, coord2, distance}
       end)
